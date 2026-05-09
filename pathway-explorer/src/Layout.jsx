@@ -3,10 +3,12 @@ import { createPageUrl } from "@/utils";
 import AnimatedLogo from "@/components/home/AnimatedLogo";
 import FloatingAIAssistant from "@/components/FloatingAIAssistant";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const { user, isAuthenticated, navigateToLogin, logout } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -70,6 +72,29 @@ export default function Layout({ children, currentPageName }) {
                   {item.name}
                 </Link>
               ))}
+
+              <div className="ml-3 pl-3" style={{ borderLeft: "1px solid #e2e8f0" }}>
+                {isAuthenticated ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-500 hidden sm:inline">{user?.email}</span>
+                    <button
+                      onClick={logout}
+                      className="text-sm font-medium rounded-lg px-3 py-1.5 transition-all"
+                      style={{ color: "#64748b", border: "1px solid #e2e8f0", background: "#ffffff" }}
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={navigateToLogin}
+                    className="text-sm font-medium rounded-lg px-3 py-1.5 transition-all"
+                    style={{ color: "#ffffff", background: "#2563EB", border: "1px solid #2563EB" }}
+                  >
+                    Sign in
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
