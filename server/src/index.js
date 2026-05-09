@@ -21,6 +21,6 @@ app.use('/api/comments', commentsRoutes);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
-app.listen(PORT, () => {
-  console.log(`Biocircuit API running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Biocircuit API running on port ${PORT}`);
 });
