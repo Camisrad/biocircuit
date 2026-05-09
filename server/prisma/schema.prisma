@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model PathwaySubmission {
+  id                   String   @id @default(cuid())
+  pathway_name         String
+  description          String
+  organism             String
+  cancer_type          String
+  tags                 String[]
+  status               String   @default("pending") // pending | approved | rejected
+  submitter_name       String
+  submitter_email      String?
+  submitter_institution String
+  submitter_country    String
+  pathway_data         Json     // { nodes: [], edges: [] }
+  journal_links        String[]
+  created_date         DateTime @default(now())
+  updated_date         DateTime @updatedAt
+
+  comments Comment[]
+
+  @@map("pathway_submissions")
+}
+
+model Comment {
+  id           String   @id @default(cuid())
+  body         String
+  author_id    String
+  author_name  String
+  author_email String?
+  pathway_id   String?  // null if comment is on a submission
+  submission   PathwaySubmission? @relation(fields: [submission_id], references: [id], onDelete: Cascade)
+  submission_id String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@map("comments")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  workos_id  String   @unique
+  email      String   @unique
+  name       String?
+  role       String   @default("user") // user | admin
+  created_at DateTime @default(now())
+
+  @@map("users")
+}
