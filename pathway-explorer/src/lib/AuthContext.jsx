@@ -13,10 +13,21 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Pick up token from WorkOS callback URL fragment
     const hash = window.location.hash;
+    const isCallback = window.location.pathname === '/auth/callback';
     if (hash.startsWith('#token=')) {
       const token = hash.slice(7);
       localStorage.setItem('biocircuit_token', token);
-      window.history.replaceState(null, '', window.location.pathname);
+      // If we landed on /auth/callback, redirect to home; otherwise just clean the hash
+      window.history.replaceState(null, '', isCallback ? '/' : window.location.pathname);
+      if (isCallback) {
+        // Force a re-render at the new path so React Router shows Home, not 404
+        window.location.replace('/');
+        return;
+      }
+    } else if (isCallback) {
+      // Callback hit without a token — bounce to home
+      window.location.replace('/');
+      return;
     }
     checkAuth();
   }, []);
