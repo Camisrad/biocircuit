@@ -14,14 +14,5 @@ A user of biocircuit needs to be able to do these things:
 
 
 
-Design:
-
-I've presented you with a Base44 app I built that works through the mechanics of the website.  If easy, we can start with that. However, we want to move this to a version controlled app on using github repositories. 
-
- We want to make sure the UI is react and we will be running this on a Railway, a light cloud platform.
-
- We want the data structure to be stores in a postgresql database that will also on railway.  
-
- We need user authentication on the website, perhaps using WorkOS or some form of authentication that Railway provides. 
 
 
